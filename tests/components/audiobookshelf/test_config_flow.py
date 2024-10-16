@@ -22,7 +22,7 @@ async def test_form(hass: HomeAssistant, mock_setup_entry: AsyncMock) -> None:
     assert result["errors"] == {}
 
     with patch(
-        "homeassistant.components.audiobookshelf.config_flow.PlaceholderHub.authenticate",
+        "homeassistant.components.audiobookshelf.api.client.AudiobookShelfClient.login",
         return_value=True,
     ):
         result = await hass.config_entries.flow.async_configure(
@@ -36,7 +36,7 @@ async def test_form(hass: HomeAssistant, mock_setup_entry: AsyncMock) -> None:
         await hass.async_block_till_done()
 
     assert result["type"] == FlowResultType.CREATE_ENTRY
-    assert result["title"] == "Name of the device"
+    assert result["title"] == "Audiobookshelf"
     assert result["data"] == {
         CONF_HOST: "1.1.1.1",
         CONF_USERNAME: "test-username",
@@ -54,7 +54,7 @@ async def test_form_invalid_auth(
     )
 
     with patch(
-        "homeassistant.components.audiobookshelf.config_flow.PlaceholderHub.authenticate",
+        "homeassistant.components.audiobookshelf.api.client.AudiobookShelfClient.login",
         side_effect=InvalidAuth,
     ):
         result = await hass.config_entries.flow.async_configure(
@@ -73,7 +73,7 @@ async def test_form_invalid_auth(
     # FlowResultType.CREATE_ENTRY or FlowResultType.ABORT so
     # we can show the config flow is able to recover from an error.
     with patch(
-        "homeassistant.components.audiobookshelf.config_flow.PlaceholderHub.authenticate",
+        "homeassistant.components.audiobookshelf.api.client.AudiobookShelfClient.login",
         return_value=True,
     ):
         result = await hass.config_entries.flow.async_configure(
@@ -87,7 +87,7 @@ async def test_form_invalid_auth(
         await hass.async_block_till_done()
 
     assert result["type"] == FlowResultType.CREATE_ENTRY
-    assert result["title"] == "Name of the device"
+    assert result["title"] == "Audiobookshelf"
     assert result["data"] == {
         CONF_HOST: "1.1.1.1",
         CONF_USERNAME: "test-username",
@@ -105,7 +105,7 @@ async def test_form_cannot_connect(
     )
 
     with patch(
-        "homeassistant.components.audiobookshelf.config_flow.PlaceholderHub.authenticate",
+        "homeassistant.components.audiobookshelf.api.client.AudiobookShelfClient.login",
         side_effect=CannotConnect,
     ):
         result = await hass.config_entries.flow.async_configure(
@@ -125,7 +125,7 @@ async def test_form_cannot_connect(
     # we can show the config flow is able to recover from an error.
 
     with patch(
-        "homeassistant.components.audiobookshelf.config_flow.PlaceholderHub.authenticate",
+        "homeassistant.components.audiobookshelf.api.client.AudiobookShelfClient.login",
         return_value=True,
     ):
         result = await hass.config_entries.flow.async_configure(
@@ -139,7 +139,7 @@ async def test_form_cannot_connect(
         await hass.async_block_till_done()
 
     assert result["type"] == FlowResultType.CREATE_ENTRY
-    assert result["title"] == "Name of the device"
+    assert result["title"] == "Audiobookshelf"
     assert result["data"] == {
         CONF_HOST: "1.1.1.1",
         CONF_USERNAME: "test-username",
