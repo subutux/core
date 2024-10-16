@@ -536,6 +536,12 @@
       "config_flow": false,
       "iot_class": "cloud_polling"
     },
+    "audiobookshelf": {
+      "name": "Audiobookshelf",
+      "integration_type": "hub",
+      "config_flow": true,
+      "iot_class": "local_polling"
+    },
     "august": {
       "name": "August Home",
       "integrations": {
